@@ -55,13 +55,13 @@
             // 
             // button3
             // 
-            button3.Enabled = false;
             button3.Location = new Point(255, 272);
             button3.Name = "button3";
             button3.Size = new Size(250, 29);
             button3.TabIndex = 2;
             button3.Text = "Service Request Status";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // Form1
             // 
@@ -81,6 +81,6 @@
 
         private Button button1;
         private Button button2;
-        private Button button3;
+        protected Button button3;
     }
 }

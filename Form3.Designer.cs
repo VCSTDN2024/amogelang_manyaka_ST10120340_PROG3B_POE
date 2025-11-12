@@ -35,6 +35,7 @@
             btnFilter = new Button();
             chkUseDateFilter = new CheckBox();
             btnReset = new Button();
+            recommendationFlowLayout = new FlowLayoutPanel();
             SuspendLayout();
             // 
             // label1
@@ -64,9 +65,9 @@
             // eventFlowLayout
             // 
             eventFlowLayout.AutoScroll = true;
-            eventFlowLayout.Location = new Point(3, 154);
+            eventFlowLayout.Location = new Point(24, 138);
             eventFlowLayout.Name = "eventFlowLayout";
-            eventFlowLayout.Size = new Size(804, 296);
+            eventFlowLayout.Size = new Size(748, 350);
             eventFlowLayout.TabIndex = 3;
             // 
             // btnFilter
@@ -99,11 +100,21 @@
             btnReset.UseVisualStyleBackColor = true;
             btnReset.Click += btnReset_Click;
             // 
+            // recommendationFlowLayout
+            // 
+            recommendationFlowLayout.AutoScroll = true;
+            recommendationFlowLayout.ForeColor = Color.FromArgb(192, 0, 192);
+            recommendationFlowLayout.Location = new Point(24, 516);
+            recommendationFlowLayout.Name = "recommendationFlowLayout";
+            recommendationFlowLayout.Size = new Size(748, 173);
+            recommendationFlowLayout.TabIndex = 7;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(819, 450);
+            ClientSize = new Size(819, 689);
+            Controls.Add(recommendationFlowLayout);
             Controls.Add(btnReset);
             Controls.Add(chkUseDateFilter);
             Controls.Add(btnFilter);
@@ -113,7 +124,7 @@
             Controls.Add(label1);
             Name = "Form3";
             Text = "Form3";
-            Load += Form3_Load_1;
+            Load += Form3_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -127,5 +138,6 @@
         private Button btnFilter;
         private CheckBox chkUseDateFilter;
         private Button btnReset;
+        private FlowLayoutPanel recommendationFlowLayout;
     }
 }

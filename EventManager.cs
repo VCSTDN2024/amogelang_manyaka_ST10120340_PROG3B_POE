@@ -1,39 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROG3B_Task1
 {
     public class EventManager
     {
-        public Stack<Event> events = new Stack<Event>();
-        public Dictionary<string, Event> EventDictionary = new Dictionary<string, Event>();
-        public HashSet<string> Categories = new HashSet<string>();
+        // --- Data Structures ---
+        private Stack<Event> recentEvents = new Stack<Event>();             // Stack for recently added events (LIFO)
+        private Queue<Event> upcomingEvents = new Queue<Event>();           // Queue for upcoming events (FIFO)
+        private Dictionary<string, Event> eventDictionary = new Dictionary<string, Event>(); // For fast lookup by title
+        private SortedDictionary<DateTime, List<Event>> eventsByDate = new SortedDictionary<DateTime, List<Event>>(); // For chronological organization
+        private HashSet<string> categories = new HashSet<string>();         // Unique list of categories
+
+        // --- Public Accessors ---
+        public IEnumerable<Event> AllEvents => eventDictionary.Values;
+        public IEnumerable<string> Categories => categories;
+
+        // --- Methods ---
 
         public void AddEvent(Event newEvent)
         {
-         events.Push(newEvent);
-            EventDictionary[newEvent.Title] = newEvent;
-            foreach (var ev in newEvent.Categories)
-       
-            Categories.Add(ev);
+            // Push to stack (recently added)
+            recentEvents.Push(newEvent);
+
+            // Enqueue upcoming
+            upcomingEvents.Enqueue(newEvent);
+
+            // Add to dictionary
+            eventDictionary[newEvent.Title] = newEvent;
+
+            // Add to sorted dictionary by date
+            if (!eventsByDate.ContainsKey(newEvent.Date.Date))
+                eventsByDate[newEvent.Date.Date] = new List<Event>();
+            eventsByDate[newEvent.Date.Date].Add(newEvent);
+
+            // Track categories
+            foreach (var cat in newEvent.Categories)
+                categories.Add(cat);
         }
 
         public IEnumerable<Event> GetAllEvents()
         {
-            return events.Reverse();//so that older ones appear first
+            return eventsByDate.Values.SelectMany(x => x);
         }
 
         public IEnumerable<Event> GetEventsByCategory(string category)
         {
-            return events.Where(e => e.Categories.Contains(category));
+            return eventDictionary.Values.Where(e => e.Categories.Contains(category));
         }
 
         public IEnumerable<Event> FilterEvents(string category = null, DateTime? date = null)
         {
-            IEnumerable<Event> filtered = events;
+            IEnumerable<Event> filtered = eventDictionary.Values;
 
             if (!string.IsNullOrEmpty(category))
                 filtered = filtered.Where(e => e.Categories.Contains(category));
@@ -41,7 +60,23 @@ namespace PROG3B_Task1
             if (date.HasValue)
                 filtered = filtered.Where(e => e.Date.Date == date.Value.Date);
 
-            return filtered.Reverse(); // Optional, keeps consistent display order
+            return filtered.OrderBy(e => e.Date);
+        }
+
+        public Event UndoLastAdded()
+        {
+            if (recentEvents.Count > 0)
+            {
+                var last = recentEvents.Pop();
+                eventDictionary.Remove(last.Title);
+                return last;
+            }
+            return null;
+        }
+
+        public IEnumerable<Event> GetUpcomingEvents()
+        {
+            return upcomingEvents.OrderBy(e => e.Date);
         }
     }
 }

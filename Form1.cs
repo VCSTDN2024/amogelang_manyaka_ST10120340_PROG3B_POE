@@ -24,8 +24,15 @@ namespace PROG3B_Task1
 
         private void button2_Click(object sender, EventArgs e)
         {
-           Form3 form3 = new Form3();
-              form3.ShowDialog();
+            Form3 form3 = new Form3();
+            form3.ShowDialog();
+            this.Hide();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form4 form4 = new Form4();
+            form4.ShowDialog();
             this.Hide();
         }
     }
